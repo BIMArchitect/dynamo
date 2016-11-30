@@ -155,3 +155,43 @@ def ClearList(_list):
 
 #Assign your output to the OUT variable
 OUT = ClearList(IN[0])
+
+
+		#Post: 5: Join element
+
+import clr
+clr.AddReference('ProtoGeometry')
+from Autodesk.DesignScript.Geometry import *
+
+clr.AddReference("RevitAPI")
+import Autodesk
+
+clr.AddReference("RevitServices")
+import RevitServices
+from RevitServices.Persistence import DocumentManager
+from RevitServices.Transactions import TransactionManager
+
+clr.AddReference("RevitNodes")
+import Revit
+clr.ImportExtensions(Revit.Elements)
+
+dataEnteringNode = IN
+
+elementlistA = UnwrapElement(IN[0])
+elementlistB = UnwrapElement(IN[1])
+
+doc = DocumentManager.Instance.CurrentDBDocument
+
+results = []
+
+TransactionManager.Instance.EnsureInTransaction(doc)
+
+for elementA in elementlistA:
+	for elementB in elementlistB:
+		try:
+			result = Autodesk.Revit.DB.JoinGeometryUtils.JoinGeometry(doc,elementA,elementB)
+			result.append(result)
+		except:
+			pass
+TransactionManager.Instance.TransactionTaskDone()
+OUT = results
