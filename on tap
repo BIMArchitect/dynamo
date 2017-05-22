@@ -1,0 +1,47 @@
+#Author: NamDang
+#gmail: dangthanhnam01.kt1996@gmail.com
+# Scrip date: 20-2-2017
+import clr
+clr.AddReference("RevitAPI")
+from Autodesk.Revit.DB	import *
+clr.AddReference("RevitServices")
+import RevitServices
+from RevitServices.Persistence	import DocumentManager
+from RevitServices.Transactions	import TransactionManager
+clr.AddReference("RevitNodes")
+import Revit
+clr.ImportExtensions(Revit.Elements)
+clr.ImportExtensions(Revit.GeometryConversion)
+clr.AddReference('ProToGeometry')
+from Autodesk.DesignScript.Geometry	import *
+clr.AddReference('System.Core')
+import System
+from System.Collections.Generic	import *
+
+doc = DocumentManager.Instance.CurrentDBDocument
+uiapp = DocumentManager.Instance.CurrentUIApplication
+app = uiapp.Application 
+
+dataEnteringNode = IN
+levelname = (IN[0])
+def kt(x):
+	if isinstance(x,str) or isinstance(x,int):
+		return x
+def warning(status):
+	if isinstance(status,str):
+		return '\n'.join('{:^30}'.format(i) for i in status.split('\n'))
+try:
+	filter = FilteredElementCollector(doc).OfClass(Level).ToElements()
+	for i in filter:
+		if kt(levelname) == i.Name:
+			l = i
+			break
+		else:
+			continue
+	OUT = l
+except NameError:
+	if levelname != None:
+		OUT = war1 = warning('Tên level cần nhập có dạng String \nVui lòng kiểm tra\ntên và kiểu tên level đã nhập. ')
+	elif levelname == None:
+		OUT = war2 = warning('Nhập tên level\ncần tìm:')
+		
